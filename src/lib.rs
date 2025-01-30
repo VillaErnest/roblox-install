@@ -94,11 +94,8 @@ impl RobloxStudio {
     }
 
     #[cfg(not(target_os = "macos"))]
-    fn locate_plugins_on_windows() -> Result<PathBuf> {
-        let mut plugin_dir = dirs::home_dir().ok_or(Error::PluginsDirectoryNotFound)?;
-        plugin_dir.push("AppData");
-        plugin_dir.push("Local");
-        plugin_dir.push("Roblox");
+    fn locate_plugins_on_windows(root: PathBuf) -> Result<PathBuf> {
+        let mut plugin_dir = root;
         plugin_dir.push("Plugins");
         Ok(plugin_dir)
     }
@@ -124,9 +121,11 @@ impl RobloxStudio {
     #[cfg(not(target_os = "macos"))]
     fn locate_from_windows_directory(root: PathBuf) -> Result<RobloxStudio> {
         let content_folder_path = root.join("content");
-        let plugins = Self::locate_plugins_on_windows()?;
-
+        
         if content_folder_path.is_dir() {
+            let roblox_root = root.parent().unwrap().to_path_buf().parent().unwrap().to_path_buf();
+            let plugins = Self::locate_plugins_on_windows(roblox_root)?;
+            
             Ok(RobloxStudio {
                 content: content_folder_path,
                 application: root.join("RobloxStudioBeta.exe"),
@@ -135,6 +134,8 @@ impl RobloxStudio {
                 root,
             })
         } else {
+            let roblox_root = root.clone();
+            let plugins = Self::locate_plugins_on_windows(roblox_root)?;
             let versions = root.join("Versions");
 
             if versions.is_dir() {
