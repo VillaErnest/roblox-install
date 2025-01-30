@@ -2,7 +2,7 @@
 name = "roblox_install"
 description = "Get the install directory of Roblox in code"
 version = "1.0.0"
-authors = ["Kampfkarren <kampfkarren@gmail.com>"]
+authors = ["Kampfkarren <kampfkarren@gmail.com>", "Ernest Villacorta <villaernest.developer@gmail.com>"]
 license = "MPL-2.0"
 repository = "https://github.com/Kampfkarren/roblox-install"
 keywords = ["roblox"]
